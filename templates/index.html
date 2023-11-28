@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&display=swap">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+
+
+    <title>IBM Employee Attrition Model</title>
+    <style>
+        body {
+            font-family: 'IBM Plex Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("{{ url_for('static', filename='light_bluemountain.jpg') }}") center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            color: #FFFFFF;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: rgb(19, 26, 54);
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: rgba(54, 57, 63, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+        }
+
+        label {
+            font-weight: medium;
+            display: block;
+            margin-bottom: 8px;
+            color: #FFFFFF;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+            background-color: #40444B;
+            border: 1px solid #586069;
+            border-radius: 4px;
+            color: #FFFFFF;
+        }
+
+        input[type="radio"] {
+            margin-right: 4px;
+        }
+
+        button {
+            background-color: rgb(33, 64, 177);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: rgb(34, 61, 161);
+        }
+
+        button.clear-button {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        button.clear-button:hover {
+            background-color: #5a6268;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .error-message {
+            color: #FF0000;
+            margin-top: 5px;
+        }
+
+        .result-text {
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: rgba(54, 57, 63, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 100px;
+        }
+
+        .back-button {
+            background-color: #6c757d;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 30px;
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>IBM Employee Attrition Model</h1>
+    <div>
+        <img src="{{ url_for('static', filename='ibm_logo.png') }}" alt="IBM Logo" style="max-width: 10%;">
+    </div>
+    {% if not attrition_prediction %}
+
+    <form action="/predict" method="POST">
+        <p style="font-size: 90%;">This model was created with the purpose of predicting employee attrition based on a
+            set
+            of information.</p>
+        <p style="font-size: 90%;">Please interview employees and get the required information.</p>
+        <p style="font-size: 90%;">For the numerical values of 1 - 4, 1 represents the lowest while 4 represents the
+            highest.</p>
+
+        <hr>
+
+
+        <label for="EnvironmentSatisfaction">Environment Satisfaction</label>
+        <div>
+            <input type="radio" id="envSat1" name="EnvironmentSatisfaction" value="1" required>
+            <label for="envSat1">1</label>
+            <input type="radio" id="envSat2" name="EnvironmentSatisfaction" value="2" required>
+            <label for="envSat2">2</label>
+            <input type="radio" id="envSat3" name="EnvironmentSatisfaction" value="3" required>
+            <label for="envSat3">3</label>
+            <input type="radio" id="envSat4" name="EnvironmentSatisfaction" value="4" required>
+            <label for="envSat4">4</label>
+        </div>
+
+        <label for="JobSatisfaction">Job Satisfaction</label>
+        <div>
+            <input type="radio" id="jobSat1" name="JobSatisfaction" value="1" required>
+            <label for="jobSat1">1</label>
+            <input type="radio" id="jobSat2" name="JobSatisfaction" value="2" required>
+            <label for="jobSat2">2</label>
+            <input type="radio" id="jobSat3" name="JobSatisfaction" value="3" required>
+            <label for="jobSat3">3</label>
+            <input type="radio" id="jobSat4" name="JobSatisfaction" value="4" required>
+            <label for="jobSat4">4</label>
+        </div>
+
+        <label for="WorkLifeBalance">Work-Life Balance</label>
+        <div>
+            <input type="radio" id="wlb1" name="WorkLifeBalance" value="1" required>
+            <label for="wlb1">1</label>
+            <input type="radio" id="wlb2" name="WorkLifeBalance" value="2" required>
+            <label for="wlb2">2</label>
+            <input type="radio" id="wlb3" name="WorkLifeBalance" value="3" required>
+            <label for="wlb3">3</label>
+            <input type="radio" id="wlb4" name="WorkLifeBalance" value="4" required>
+            <label for="wlb4">4</label>
+        </div>
+
+        <a style="color: #ff2a2a; ">{{ years_at_company_error }}</a>
+        <label for="YearsAtCompany">Years at Company</label>
+        <input type="number" name="YearsAtCompany" required>
+
+        <a style="color: #ff2a2a; ">{{ income_error }}</a>
+        <label for="IncomeCategory">Monthly Income (1000 - 15000)</label>
+        <input type="number" name="IncomeCategory" required>
+
+        <a style="color: #ff2a2a; ">{{ age_error }}</a>
+        <label for="Age">Age (18 - 60)</label>
+        <input type="number" name="Age" required>
+
+        <label for="MaritalStatus">Marital Status</label>
+        <select name="MaritalStatus" required>
+            <option value="Divorced">Divorced</option>
+            <option value="Married">Married</option>
+            <option value="Single">Single</option>
+        </select>
+
+        <p style="color: #ff2a2a; ">{{ other_error }}</p>
+
+
+        <div style="display: flex; justify-content: space-between; width: 35%; margin-top: 10px;">
+            <button type="submit"><i class="fas fa-check-circle"></i> Predict</button>
+
+            <a style="text-decoration: none; color: white;">
+                <button type="reset" class="clear-button"><i class="fas fa-sync-alt"></i> Clear</button>
+            </a>
+        </div>
+    </form>
+
+    {% else %}
+    <div class="result-text">
+        <p>{{ attrition_prediction }}</p>
+        <button class="back-button" onclick="window.location.href='/'"><i class="fas fa-sync-alt"></i> Back</button>
+    </div>
+
+    {% endif %}
+
+
+</body>
+
+</html>
